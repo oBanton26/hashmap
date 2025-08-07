@@ -6,6 +6,7 @@ hashMap.set('Zoe', 'fart');
 hashMap.set('Zoe', 'farttt');
 hashMap.set('Ulysse', 'shit');
 hashMap.set('Oez', 'chat');
-console.log(hashMap.get('Zoe'));
+console.log(hashMap.remove('Zoe'));
+console.log(hashMap.remove('Oezz'));
 console.log(hashMap.array);
 console.log(hashMap.entries)

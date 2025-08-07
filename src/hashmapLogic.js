@@ -61,8 +61,21 @@ export class HashMap {
     has (key) {
         const hashCode = this.hash(key);
         if (!this.array[hashCode]) {
+            // case where the bucket is empty so undefined
             return false;
         } else if (this.array[hashCode].containsKey(key)){
+            return true;
+        } else {
+            return false;
+        };
+    };
+
+    remove (key) {
+        const hashCode = this.hash(key);
+        if (this.has(key)) {
+            const index = this.array[hashCode].findKey(key);
+            this.array[hashCode].removeAt(index);
+            this.entries--;
             return true;
         } else {
             return false;
