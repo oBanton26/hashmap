@@ -4,7 +4,8 @@ export class HashMap {
     constructor (loadFactor, capacity = 16) {
         this.loadFactor = loadFactor;
         this.capacity = capacity;
-        this.entries = 0;
+        this.originalCapacity = capacity;
+        this.counter = 0;
         this.array = [...Array(this.capacity)];
     };
 
@@ -22,7 +23,7 @@ export class HashMap {
     };
 
     set (key, value) {
-        if (this.entries > this.loadFactor * this.capacity) {
+        if (this.counter > this.loadFactor * this.capacity) {
             // grow the array size
             console.log("You've reached the limit of your hashmap, please expand")
         };
@@ -34,7 +35,7 @@ export class HashMap {
         if (bucket === undefined) {
             this.array[hashCode] = new LinkedList();
             this.array[hashCode].append(pair);
-            this.entries++;
+            this.counter++;
         } else {
             if (this.array[hashCode].containsKey(key)) {
                 // Replace value when key already assigned
@@ -42,7 +43,7 @@ export class HashMap {
                 this.array[hashCode].at(index).value = pair;
             } else {
                 this.array[hashCode].append(pair);
-                this.entries++;
+                this.counter++;
             };
         };
     };
@@ -75,17 +76,47 @@ export class HashMap {
         if (this.has(key)) {
             const index = this.array[hashCode].findKey(key);
             this.array[hashCode].removeAt(index);
-            this.entries--;
+            this.counter--;
             return true;
         } else {
             return false;
-        }
-    }
-}
-
-class KeyValuePair {
-    constructor (key, value) {
-        this.key = key;
-        this.value = value;
+        };
     };
+
+    length () {
+        return this.counter;
+    };
+
+    clear () {
+        this.array = [...Array(this.originalCapacity)];
+        this.counter = 0;
+    };
+
+    keys () {
+        const keysArray = [];
+        for (let bucket of this.array) {
+            if (!bucket) {}
+            else {
+                const bucketSize = bucket.size();
+                for (let i=0; i<bucketSize; i++) {
+                    keysArray.push(bucket.at(i).value[0]);
+                };
+            }
+        };
+        return keysArray;
+    };
+
+    values () {
+        const valuesArray = [];
+        for (let bucket of this.array) {
+            if (!bucket) {}
+            else {
+                const bucketSize = bucket.size();
+                for (let i=0; i<bucketSize; i++) {
+                    valuesArray.push(bucket.at(i).value[1]);
+                };
+            }
+        };
+        return valuesArray;
+    }
 }
