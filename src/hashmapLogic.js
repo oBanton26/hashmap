@@ -44,8 +44,30 @@ export class HashMap {
                 this.array[hashCode].append(pair);
                 this.entries++;
             };
-        }
+        };
     };
+
+    get (key) {
+        const hashCode = this.hash(key);
+        if (this.has(key)) {
+            const index = this.array[hashCode].findKey(key);
+            const value = this.array[hashCode].at(index).value;
+            return value[1];
+        } else {
+            return null;
+        }
+    }
+
+    has (key) {
+        const hashCode = this.hash(key);
+        if (!this.array[hashCode]) {
+            return false;
+        } else if (this.array[hashCode].containsKey(key)){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 class KeyValuePair {
