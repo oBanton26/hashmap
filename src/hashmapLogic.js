@@ -23,15 +23,28 @@ export class HashMap {
     };
 
     set (key, value) {
-        if (this.counter > this.loadFactor * this.capacity) {
+        if (this.length() >= this.loadFactor * this.capacity) {
             // grow the array size
-            console.log("You've reached the limit of your hashmap, please expand")
-        };
+            const currentCapacity = this.capacity;
+            this.capacity = this.capacity * 2;
+            const numberOfIterationToExpand = this.capacity - currentCapacity;
 
+            // repopulating the hashMap with the new hashing system
+            const storedEntries = this.entries();
+            this.clear();
+            for (let i=0; i<numberOfIterationToExpand; i++) {
+                this.array.push(undefined);
+            };
+            for (let pair of storedEntries) {
+                this.set(pair[0], pair[1]);
+            };
+
+        };
+        
         const hashCode = this.hash(key);
         const bucket = this.array[hashCode];
         const pair = [key, value];
-
+        
         if (bucket === undefined) {
             this.array[hashCode] = new LinkedList();
             this.array[hashCode].append(pair);
@@ -118,5 +131,20 @@ export class HashMap {
             }
         };
         return valuesArray;
-    }
+    };
+    
+    entries () {
+        const entriesArray = [];
+        for (let bucket of this.array) {
+            if (!bucket) {}
+            else {
+                const bucketSize = bucket.size();
+                for (let i=0; i<bucketSize; i++) {
+                    entriesArray.push(bucket.at(i).value);
+                };
+            }
+        };
+        return entriesArray;
+    };
+
 }
